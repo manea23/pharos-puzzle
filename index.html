@@ -16,46 +16,14 @@
   --tile-radius: 14px;
   --board-size: min(88vw, 460px);
 }
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at 20% 20%, #12151b 0%, #090c10 100%);
-  color: var(--text);
-  overflow-x: hidden;
-}
-.header {
-  text-align: center;
-  padding: 24px 12px 10px;
-}
+body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(circle at 20% 20%, #12151b 0%, #090c10 100%); color: var(--text); overflow-x: hidden; }
+.header { text-align: center; padding: 24px 12px 10px; }
 .header h1 { font-size: 2.2rem; font-weight: 700; color: var(--neon); text-shadow: 0 0 8px rgba(0,255,255,0.5);}
 .header .sub { font-size: 0.9rem; color: #9da3ad; }
-.panel {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto 24px;
-  padding: 24px;
-  border-radius: 22px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  backdrop-filter: blur(18px) saturate(180%);
-}
-.board-wrap {
-  width: var(--board-size);
-  aspect-ratio: 1/1;
-  margin: 0 auto 24px;
-  padding: 10px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-}
+.panel { width: 100%; max-width: 520px; margin: 0 auto 24px; padding: 24px; border-radius: 22px; background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(0,0,0,0.25); backdrop-filter: blur(18px) saturate(180%); }
+.board-wrap { width: var(--board-size); aspect-ratio: 1/1; margin: 0 auto 24px; padding: 10px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
 .board { width: 100%; height: 100%; display: grid; gap: 6px; }
-.tile {
-  border-radius: var(--tile-radius);
-  background-size: 300% 300%;
-  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease;
-}
+.tile { border-radius: var(--tile-radius); background-size: 300% 300%; transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease; }
 .tile:not(.empty):hover { transform: scale(1.06); box-shadow: 0 6px 28px rgba(0,255,255,0.25); }
 .tile.empty { background: transparent; }
 .stats { text-align: center; margin-bottom: 18px; }
@@ -71,31 +39,82 @@ body {
 .status-box { margin-top: 22px; padding: 14px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); text-align:center; }
 #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 2000; }
 #winFlash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(255,255,255,0.7), transparent); opacity: 0; transition: 1s ease; pointer-events: none; z-index: 3000; }
-@media (max-width: 480px) {
-  .preset-thumb { width: 70px; height: 70px; }
-  .action-btn { padding: 12px; }
+
+.leaderboard-card {
+  background: rgba(255,255,255,0.05);
+  border-left: 4px solid var(--neon);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s, background 0.2s;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
+.leaderboard-card:hover {
+  background: rgba(6,231,247,0.15);
+  transform: scale(1.02);
+}
+.leaderboard-card .top-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.leaderboard-card .rank {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--neon);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.leaderboard-card .wallet {
+  font-family: monospace;
+  color: #e7ecf2;
+  flex: 1;
+  text-align: left;
+}
+.leaderboard-card .details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #cfd4da;
+}
+.rank-gold {
+  border-left-color: #FFD700;
+  background: rgba(255, 215, 0, 0.1);
+  animation: popTopRank 1.2s ease forwards;
+  box-shadow: 0 0 10px #FFD700;
+}
+.rank-silver {
+  border-left-color: #C0C0C0;
+  background: rgba(192, 192, 192, 0.1);
+  animation: popTopRank 1.2s ease forwards;
+  box-shadow: 0 0 10px #C0C0C0;
+}
+.rank-bronze {
+  border-left-color: #CD7F32;
+  background: rgba(205, 127, 50, 0.1);
+  animation: popTopRank 1.2s ease forwards;
+  box-shadow: 0 0 10px #CD7F32;
+}
+@keyframes popTopRank {
+  0% { transform: scale(0.95); box-shadow: 0 0 0px rgba(255,255,255,0); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+  100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.15); }
+}
+
+@media (max-width: 480px) { .preset-thumb { width: 70px; height: 70px; } .action-btn { padding: 12px; } }
 </style>
 </head>
 <body>
 
-  
 <div class="header">
   <h1>PHAROS PUZZLE</h1>
   <div class="sub">Pharos Puzzle </div>
 </div>
 
 <div class="panel">
-
-  <div class="board-wrap">
-    <div id="board" class="board"></div>
-  </div>
-
-  <div class="stats">
-    <div id="moves">Moves: 0</div>
-    <div id="timer" class="text-muted">Time: 00:00</div>
-  </div>
-
+  <div class="board-wrap"><div id="board" class="board"></div></div>
+  <div class="stats"><div id="moves">Moves: 0</div><div id="timer" class="text-muted">Time: 00:00</div></div>
   <div class="action-bar">
     <button id="btnShuffle" class="action-btn">🔀 Shuffle</button>
     <button class="action-btn" data-size="3">3×3</button>
@@ -109,34 +128,13 @@ body {
     <input id="imageUpload" type="file" class="form-control mt-2" accept="image/*">
   </div>
 
-  <div class="status-box">
-    <div id="status">Ready</div>
-  </div>
+  <div class="status-box"><div id="status">Ready</div></div>
 </div>
 
-<!-- Tabs for Leaderboard and Player Info -->
+<!-- Leaderboard -->
 <div class="container mt-4">
-  <ul class="nav nav-tabs" id="tabMenu">
-    <li class="nav-item"><button class="nav-link active" data-target="leaderboardTab">Leaderboard</button></li>
-    <li class="nav-item"><button class="nav-link" data-target="playerTab">My Submissions</button></li>
-  </ul>
-  <div class="tab-content mt-2">
-    <div id="leaderboardTab" class="tab-pane active">
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr><th>#</th><th>Wallet</th><th>Size</th><th>Moves</th><th>Time</th></tr>
-          </thead>
-          <tbody id="leaderboardBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div id="playerTab" class="tab-pane">
-      <input id="walletInput" class="form-control mb-2" placeholder="Enter your wallet">
-      <button id="btnLoadPlayer" class="btn btn-primary mb-3">Load</button>
-      <ul id="playerList" class="list-group"></ul>
-    </div>
-  </div>
+  <h3 class="text-center mb-3" style="color:var(--neon);">Leaderboard</h3>
+  <div id="leaderboardCards" class="d-flex flex-column gap-3"></div>
 </div>
 
 <!-- Reward Modal -->
@@ -146,7 +144,7 @@ body {
       <h5 class="mb-2">🎁 Claim Your Reward</h5>
       <input id="walletAddress" class="form-control mb-2" placeholder="Enter your wallet address">
       <div id="rewardMsg" class="small text-muted mb-2"></div>
-      <button id="btnClaim" class="btn btn-success w-100">Claim Phrs Tokens</button>
+      <button id="btnClaim" class="btn btn-success w-100">Claim $PHRS Tokens</button>
     </div>
   </div>
 </div>
@@ -156,13 +154,14 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-/* ===================== PUZZLE VARIABLES ===================== */
+const SUPABASE_URL = "https://avqcmqixkjavswbnyyht.supabase.co";        
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2cWNtcWl4a2phdnN3Ym55eWh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNTY3MDEsImV4cCI6MjA3OTkzMjcwMX0.S3VEUGBQp8Pf28cEdxuDtcwcs0bbigRMZ-CdVq-LidM";  
+
 const boardEl = document.getElementById("board");
 const movesEl = document.getElementById("moves");
 const timerEl = document.getElementById("timer");
 const statusEl = document.getElementById("status");
 const presetContainer = document.getElementById("presetContainer");
-
 const rewardModal = new bootstrap.Modal(document.getElementById("rewardModal"));
 const walletAddress = document.getElementById("walletAddress");
 const btnClaim = document.getElementById("btnClaim");
@@ -170,7 +169,6 @@ const rewardMsg = document.getElementById("rewardMsg");
 
 let size = 3, tiles = [], emptyIndex = 0, moves = 0, seconds = 0, timer = null, baseImage = null;
 
-/* Presets */
 const presets = [
   "https://picsum.photos/id/1025/600",
   "https://picsum.photos/id/1040/600",
@@ -178,62 +176,35 @@ const presets = [
   "https://picsum.photos/id/1050/600"
 ];
 
-/* ===================== LEADERBOARD STORAGE (localStorage) ===================== */
-const STORAGE_KEY = "pharosLeaderboard";
-let leaderboard = JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
-
-function saveLeaderboard(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(leaderboard));
-}
-
-function addSubmission(wallet, size, moves){
-  leaderboard.push({wallet,size,moves,timestamp:Date.now()});
-  saveLeaderboard();
-  loadLeaderboard();
-}
-
-/* ===================== INIT PRESETS ===================== */
-function loadPresets() {
-  presetContainer.innerHTML = "";
-  presets.forEach(src => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.className = "preset-thumb";
-    img.onclick = () => { baseImage = src; updateBoardUI(); };
-    presetContainer.appendChild(img);
-  });
-}
-
-/* ===================== TIMER ===================== */
 function startTimer(){ if(timer) return; timer = setInterval(()=>{seconds++; timerEl.textContent=formatTime(seconds);},1000);}
 function stopTimer(){ clearInterval(timer); timer=null;}
 function formatTime(s){ return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;}
 
-/* ===================== BOARD ===================== */
-function buildBoard(){
-  tiles = [...Array(size*size).keys()];
-  emptyIndex = tiles.length-1;
-  moves = 0; seconds=0;
-  stopTimer();
+function buildBoard(){ 
+  tiles=[...Array(size*size).keys()]; 
+  emptyIndex=tiles.length-1; 
+  moves=0; 
+  seconds=0; 
+  stopTimer(); 
   updateBoardUI();
+  shuffle();
 }
 
 function updateBoardUI(){
   boardEl.innerHTML="";
   boardEl.style.gridTemplateColumns=`repeat(${size},1fr)`;
-  const frag = document.createDocumentFragment();
-  const unit = 100/(size-1);
+  const frag=document.createDocumentFragment();
+  const unit=100/(size-1);
   tiles.forEach((t,idx)=>{
-    const tile = document.createElement("div");
+    const tile=document.createElement("div");
     tile.className="tile";
     if(t===emptyIndex) tile.classList.add("empty");
     else {
-      const row = Math.floor(t/size);
-      const col = t%size;
+      const row=Math.floor(t/size), col=t%size;
       tile.style.backgroundImage=baseImage?`url(${baseImage})`:"linear-gradient(135deg, #1deefb, #208abf)";
       tile.style.backgroundSize=`${size*100}% ${size*100}%`;
       tile.style.backgroundPosition=`${col*unit}% ${row*unit}%`;
-      tile.onclick = ()=>handleTileClick(idx);
+      tile.onclick=()=>handleTileClick(idx);
     }
     frag.appendChild(tile);
   });
@@ -242,26 +213,21 @@ function updateBoardUI(){
   timerEl.textContent=`Time: ${formatTime(seconds)}`;
 }
 
-/* ===================== MOVEMENT ===================== */
 function isAdjacent(a,b){ const r1=Math.floor(a/size),c1=a%size,r2=Math.floor(b/size),c2=b%size; return Math.abs(r1-r2)+Math.abs(c1-c2)===1;}
 function handleTileClick(idx){
-  const emptyPos = tiles.indexOf(emptyIndex);
+  const emptyPos=tiles.indexOf(emptyIndex);
   if(!isAdjacent(idx,emptyPos)) return;
   [tiles[idx],tiles[emptyPos]]=[tiles[emptyPos],tiles[idx]];
-  moves++; updateBoardUI();
-  if(!timer) startTimer();
+  moves++; updateBoardUI(); if(!timer) startTimer();
   if(checkSolved()) onSolved();
 }
-
 function checkSolved(){ return tiles.every((v,i)=>v===i); }
 
-/* ===================== SHUFFLE ===================== */
 function shuffle(times=180){
   for(let i=0;i<times;i++){
     const emptyPos=tiles.indexOf(emptyIndex);
-    const r=Math.floor(emptyPos/size),c=emptyPos%size;
-    const opts=[];
-    [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr>=0 && rr<size && cc>=0 && cc<size) opts.push(rr*size+cc);});
+    const r=Math.floor(emptyPos/size),c=emptyPos%size,opts=[];
+    [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr>=0&&rr<size&&cc>=0&&cc<size) opts.push(rr*size+cc);});
     const choice=opts[Math.floor(Math.random()*opts.length)];
     [tiles[choice],tiles[emptyPos]]=[tiles[emptyPos],tiles[choice]];
   }
@@ -269,96 +235,99 @@ function shuffle(times=180){
   statusEl.textContent="Shuffled";
 }
 
-/* ===================== WIN EFFECTS ===================== */
 const confettiCanvas=document.getElementById("confettiCanvas");
 const ctx=confettiCanvas.getContext("2d");
-
 function launchConfetti(){
-  confettiCanvas.width=window.innerWidth;
-  confettiCanvas.height=window.innerHeight;
+  confettiCanvas.width=window.innerWidth; confettiCanvas.height=window.innerHeight;
   const pieces=Array.from({length:180},()=>({x:Math.random()*window.innerWidth,y:Math.random()*-200,r:Math.random()*7+3,c:`hsl(${Math.random()*360},100%,60%)`,vx:(Math.random()-0.5)*2,vy:Math.random()*3+1}));
-  function frame(){
-    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-    pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});
-    requestAnimationFrame(frame);
-  }
+  function frame(){ ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();}); requestAnimationFrame(frame); }
   frame();
 }
+function flashWin(){ const fw=document.getElementById("winFlash"); fw.style.opacity=1; setTimeout(()=>fw.style.opacity=0,1200); }
 
-function flashWin(){
-  const fw=document.getElementById("winFlash");
-  fw.style.opacity=1; setTimeout(()=>fw.style.opacity=0,1200);
+function onSolved(){ stopTimer(); statusEl.textContent="Solved!"; flashWin(); launchConfetti();
+  rewardModal.show(); rewardMsg.textContent = `Reward: ${getRewardAmount(size)} Phrs tokens`; 
 }
 
-/* ===================== ON SOLVED ===================== */
-function onSolved(){
-  stopTimer();
-  statusEl.textContent="Solved!";
-  flashWin(); launchConfetti();
-  rewardModal.show();
-  rewardMsg.textContent = `Reward for this puzzle: ${getRewardAmount(size)} Phrs tokens`;
-}
-
-/* ===================== REWARD SYSTEM ===================== */
-let lastClaimTime = 0;
-const claimCooldown = 24*60*60*1000; // 24h
+let lastClaimTime=0; const claimCooldown=24*60*60*1000;
 function getRewardAmount(size){ return size===5?0.5:size===4?0.2:0.1; }
 
-btnClaim.onclick = () => {
+btnClaim.onclick = async ()=>{
   const now = Date.now();
   if(now - lastClaimTime < claimCooldown){
     const rem = claimCooldown-(now-lastClaimTime);
-    const h = Math.floor(rem/1000/60/60);
-    const m = Math.floor((rem/1000/60)%60);
-    alert(`⏳ Wait ${h}h ${m}m before claiming again.`);
-    return;
+    const h = Math.floor(rem/1000/60/60); const m=Math.floor((rem/1000/60)%60);
+    alert(`⏳ Wait ${h}h ${m}m before claiming again.`); return;
   }
   if(!walletAddress.value){ alert("Enter wallet"); return; }
   const amount = getRewardAmount(size);
   lastClaimTime = now;
-  addSubmission(walletAddress.value, size, moves);
-  rewardModal.hide();
-  alert(`✅ Successfully Submitted ${walletAddress.value} for ${amount} Phrs tokens.`);
-  walletAddress.value = "";
-}
 
-/* ===================== INIT ===================== */
-document.getElementById("imageUpload").onchange = e => {
-  if(e.target.files[0]){
-    const reader = new FileReader();
-    reader.onload=()=>{ baseImage=reader.result; updateBoardUI(); };
-    reader.readAsDataURL(e.target.files[0]);
-  }
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard`, {
+      method:"POST",
+      headers: {"apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`, "Content-Type":"application/json"},
+      body: JSON.stringify({wallet: walletAddress.value, size, moves, time_seconds: seconds})
+    });
+    if(!res.ok) throw new Error("Failed to submit");
+    alert(`✅ Successfully submitted ${walletAddress.value} for ${amount} Phrs tokens`);
+    walletAddress.value=""; rewardModal.hide(); loadLeaderboard();
+  }catch(err){ console.error(err); alert("Submission failed"); }
 };
-document.getElementById("btnShuffle").onclick = () => shuffle();
-document.querySelectorAll("[data-size]").forEach(btn=>{btn.onclick=()=>{size=parseInt(btn.dataset.size); buildBoard(); shuffle();};});
-loadPresets(); buildBoard(); shuffle();
 
-/* ===================== LEADERBOARD ===================== */
-const leaderboardBody = document.getElementById("leaderboardBody");
-function loadLeaderboard(){
-  leaderboard.sort((a,b)=>a.moves-b.moves);
-  leaderboardBody.innerHTML="";
-  leaderboard.forEach((e,i)=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${i+1}</td><td>${e.wallet}</td><td>${e.size}×${e.size}</td><td>${e.moves}</td><td>${new Date(e.timestamp).toLocaleString()}</td>`;
-    leaderboardBody.appendChild(tr);
-  });
+async function loadLeaderboard() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard?select=*&order=moves.asc,time_seconds.asc`, {
+      headers: {"apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`}
+    });
+    const data = await res.json();
+    const container = document.getElementById("leaderboardCards");
+    container.innerHTML = "";
+
+    data.forEach((e, i) => {
+      const card = document.createElement("div");
+      let rankClass = "", medal = "";
+      if (i === 0) { rankClass = "rank-gold"; medal = "🥇"; }
+      else if (i === 1) { rankClass = "rank-silver"; medal = "🥈"; }
+      else if (i === 2) { rankClass = "rank-bronze"; medal = "🥉"; }
+
+      card.className = `leaderboard-card ${rankClass}`;
+      card.innerHTML = `
+        <div class="top-row">
+          <div class="rank">${medal}${i+1}</div>
+          <div class="wallet">${e.wallet}</div>
+        </div>
+        <div class="details">
+          <span>Size: ${e.size}×${e.size}</span>
+          <span>Moves: ${e.moves}</span>
+          <span>Time: ${formatTime(e.time_seconds)}</span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  } catch(err){ console.error(err); }
 }
-loadLeaderboard();
 
-
-
-/* ===================== TABS ===================== */
-document.querySelectorAll("#tabMenu button").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll("#tabMenu button").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.target).classList.add("active");
-  }
+// Presets thumbnails
+presets.forEach(url=>{
+  const img=document.createElement("img"); img.src=url; img.className="preset-thumb";
+  img.onclick=()=>{ baseImage=url; buildBoard(); }
+  presetContainer.appendChild(img);
 });
-</script>
 
+// Image upload
+document.getElementById("imageUpload").addEventListener("change",e=>{
+  const file=e.target.files[0]; if(!file) return;
+  baseImage=URL.createObjectURL(file); buildBoard();
+});
+
+// Board size buttons
+document.querySelectorAll(".action-bar button[data-size]").forEach(btn=>{
+  btn.onclick=()=>{ size=parseInt(btn.dataset.size); buildBoard(); }
+});
+document.getElementById("btnShuffle").onclick=shuffle;
+
+buildBoard(); loadLeaderboard();
+</script>
 </body>
 </html>
