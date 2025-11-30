@@ -397,14 +397,16 @@ presets.forEach(src=>{
 });
 document.getElementById("imageUpload").addEventListener("change",e=>{if(e.target.files.length){baseImage=URL.createObjectURL(e.target.files[0]); buildBoard();}});
 
-// Set first preset image by default
-baseImage = presets[0];
+// Pick a random preset image to start
+baseImage = presets[Math.floor(Math.random() * presets.length)];
 
 // Initialize board and leaderboard
 buildBoard(); 
 loadLeaderboard();
+
 </script>
 
 </body>
 </html>
+
 
