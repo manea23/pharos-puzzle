@@ -342,6 +342,10 @@ btnClaim.onclick = async () => {
     rewardModal.hide();
     loadLeaderboard();
 
+    // Reshuffle the board for a new puzzle
+      shuffle();
+
+
   } catch (err) {
     console.error(err);
     alert("Submission failed");
@@ -397,8 +401,9 @@ presets.forEach(src=>{
 });
 document.getElementById("imageUpload").addEventListener("change",e=>{if(e.target.files.length){baseImage=URL.createObjectURL(e.target.files[0]); buildBoard();}});
 
-// Pick a random preset image to start
-baseImage = presets[Math.floor(Math.random() * presets.length)];
+
+// Set first preset image by default
+baseImage = presets[0];
 
 // Initialize board and leaderboard
 buildBoard(); 
@@ -408,5 +413,3 @@ loadLeaderboard();
 
 </body>
 </html>
-
-
