@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <link rel="icon" type="image/png" href="images/favicon.png">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pharos Puzzle Game </title>
@@ -84,6 +83,17 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   color: #cfd4da;
   margin-top: 6px;
 }
+.hint-highlight {
+  outline: 4px solid #06e7f7;
+  box-shadow: 0 0 20px #06e7f7;
+  animation: hintPulse 1s infinite alternate;
+}
+
+@keyframes hintPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
 .rank-gold {
   border-left-color: #FFD700;
   background: rgba(255, 215, 0, 0.1);
@@ -126,6 +136,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
     <button class="action-btn" data-size="3">3×3</button>
     <button class="action-btn" data-size="4">4×4</button>
     <button class="action-btn" data-size="5">5×5</button>
+    <button id="btnHint" class="action-btn">💡 Hint</button>
   </div>
 
   <div class="selector">
@@ -176,6 +187,10 @@ const rewardMsg = document.getElementById("rewardMsg");
 
 let size = 3, tiles = [], emptyIndex = 0, moves = 0, seconds = 0, timer = null, baseImage = null;
 
+let hintsRemaining = 3;  // 🔧 ADDED — track 3 hints
+const btnHint = document.getElementById("btnHint");  // 🔧 ADDED
+
+
 const presets = [
   "images/pic1.jpg",
   "images/pic2.jpg",
@@ -196,6 +211,11 @@ function buildBoard(){
   stopTimer(); 
   updateBoardUI();
   shuffle();
+
+  // 🔧 ADDED — reset hints each new puzzle
+  hintsRemaining = 3;
+  btnHint.disabled = false;
+  btnHint.textContent = "💡 Hint";
 }
 
 function updateBoardUI(){
@@ -342,7 +362,6 @@ btnClaim.onclick = async () => {
     rewardModal.hide();
     loadLeaderboard();
 
-    // Reshuffle the board for a new puzzle
       shuffle();
 
 
@@ -390,9 +409,27 @@ async function loadLeaderboard() {
   }
 }
 
-// Event listeners
+// ==========================================
+// 🔧 NEW HINT BUTTON LOGIC (3 uses max)
+// ==========================================
+btnHint.onclick = () => {
+  if (hintsRemaining > 0) {
+    hintsRemaining--;
+    autoHintMove();
+
+    if (hintsRemaining === 0) {
+      btnHint.disabled = true;
+      btnHint.textContent = "💡 No Hints";
+    } else {
+      btnHint.textContent = `💡 Hint (${hintsRemaining} left)`;
+    }
+  }
+};
+// ==========================================
+
+
 document.querySelectorAll(".action-bar button[data-size]").forEach(btn=>{
-  btn.onclick=()=>{size=parseInt(btn.dataset.size); buildBoard(); loadLeaderboard();}
+  btn.onclick=()=>{size=parseInt(btn.dataset.size); buildBoard(); loadLeaderboard();};
 });
 document.getElementById("btnShuffle").onclick=()=>shuffle();
 presets.forEach(src=>{
@@ -402,12 +439,47 @@ presets.forEach(src=>{
 document.getElementById("imageUpload").addEventListener("change",e=>{if(e.target.files.length){baseImage=URL.createObjectURL(e.target.files[0]); buildBoard();}});
 
 
-// Set first preset image by default
 baseImage = presets[0];
 
-// Initialize board and leaderboard
 buildBoard(); 
 loadLeaderboard();
+
+
+function autoHintMove() {
+
+
+  const emptyPos = tiles.indexOf(emptyIndex);
+  const r = Math.floor(emptyPos / size);
+  const c = emptyPos % size;
+
+  const adjacentPositions = [
+    [r - 1, c], 
+    [r + 1, c], 
+    [r, c - 1], 
+    [r, c + 1]
+  ]
+    .filter(([rr, cc]) => rr >= 0 && rr < size && cc >= 0 && cc < size)
+    .map(([rr, cc]) => rr * size + cc);
+
+
+  const movableWrongTiles = adjacentPositions.filter(pos => tiles[pos] !== pos);
+
+
+  const movePos = movableWrongTiles.length > 0
+    ? movableWrongTiles[Math.floor(Math.random() * movableWrongTiles.length)]
+    : adjacentPositions[Math.floor(Math.random() * adjacentPositions.length)];
+
+ 
+  [tiles[movePos], tiles[emptyPos]] = [tiles[emptyPos], tiles[movePos]];
+
+  moves++;
+  updateBoardUI();
+  if (!timer) startTimer();
+
+  
+  if (checkSolved()) onSolved();
+}
+
 
 </script>
 
